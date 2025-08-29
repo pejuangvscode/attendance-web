@@ -3,6 +3,15 @@ import { Geist } from "next/font/google";
 
 import { api } from "~/utils/api";
 
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
+
+
 import "~/styles/globals.css";
 
 const geist = Geist({
@@ -12,7 +21,15 @@ const geist = Geist({
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <div className={geist.className}>
-      <Component {...pageProps} />
+      <ClerkProvider>
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+        <Component {...pageProps} />
+      </ClerkProvider>
     </div>
   );
 };
