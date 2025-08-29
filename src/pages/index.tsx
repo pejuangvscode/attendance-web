@@ -15,7 +15,7 @@ export default function Home() {
         
         <h1>
           INI WEB BUAT PRESENSI GKI KARAWACI
-          GACORRRRR
+          GACORRRRR aisdasdiasjdoiasjdoj
         </h1>
           
       </main>
