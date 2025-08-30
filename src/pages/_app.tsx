@@ -1,16 +1,7 @@
 import { type AppType } from "next/app";
 import { Geist } from "next/font/google";
-
 import { api } from "~/utils/api";
-
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
-} from '@clerk/nextjs'
-
+import { ClerkProvider } from '@clerk/nextjs';
 
 import "~/styles/globals.css";
 
@@ -21,13 +12,7 @@ const geist = Geist({
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <div className={geist.className}>
-      <ClerkProvider>
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+      <ClerkProvider {...pageProps}>
         <Component {...pageProps} />
       </ClerkProvider>
     </div>
