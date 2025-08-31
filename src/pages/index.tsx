@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedOut } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 
 
@@ -74,10 +74,7 @@ export default function Home() {
             Welcome
           </h1>
           <p className="mt-6 text-lg text-gray-300 max-w-2xl">
-            Temukan informasi lengkap tentang kehadiran dan keterlibatan jemaat
-            dalam ibadah dan pelayanan. Mari kita bersama meninjau pertumbuhan
-            komunitas kita, sebagai bagian dari panggilan untuk terus bertumbuh
-            dalam iman dan kesetiaan.
+            Temukan informasi lengkap tentang kehadiran dan keterlibatan jemaat dalam ibadah dan pelayanan. Mari kita bersama meninjau pertumbuhan komunitas kita, sebagai bagian dari panggilan untuk terus bertumbuh dalam iman dan kesetiaan.
           </p>
           <SignedOut>
             <Link href="/login">
