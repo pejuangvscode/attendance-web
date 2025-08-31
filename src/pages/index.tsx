@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { SignedOut } from "@clerk/nextjs";
+import { SignedOut, UserButton, SignedIn } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 
 
@@ -65,6 +65,10 @@ export default function Home() {
                     </button>
                   </Link>
                 </SignedOut>
+
+                <SignedIn>
+                  <UserButton afterSignOutUrl="/index.tsx" />
+                </SignedIn>
               </li>
             </ul>
           </nav>
