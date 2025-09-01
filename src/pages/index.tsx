@@ -40,38 +40,71 @@ export default function Home() {
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/backgroundHome.jpg')" }}/>
         <div className="absolute inset-0 bg-[#0f172a]/80" />
           <nav className="fixed top-0 left-0 z-50 flex w-full items-center justify-center px-8 py-6 bg-[#0f172a]/60 backdrop-blur-sm">
-            <div className="flex items-center space-x-4">
-              <Image src="/LOGOGKI.png" alt="Logo" width={48} height={48} className="h-12 w-12"/>
-              <span className="text-white font-semibold text-xl">
-                GKI Karawaci
-              </span>
-            </div>
+          <div className="flex items-center space-x-4">
+            <Image
+              src="/LOGOGKI.png"
+              alt="Logo"
+              width={48}
+              height={48}
+              className="h-12 w-12"
+            />
+            <span className="text-white font-semibold text-xl">
+              GKI Karawaci
+            </span>
+          </div>
 
-            <ul className="hidden md:flex items-center space-x-8 text-white font-medium ml-120">
-              <li className={`cursor-pointer transition ${activeSection === "home" ? "text-blue-400 font-bold underline underline-offset-4" : "hover:text-blue-400"}`}>
-                <a href="#home">Home</a>
-              </li>
-              <li className={`cursor-pointer transition ${activeSection === "about" ? "text-blue-400 font-bold underline underline-offset-4" : "hover:text-blue-400"}`}>
-                <a href="#about">About</a>
-              </li>
-              <li className={`cursor-pointer transition ${activeSection === "location" ? "text-blue-400 font-bold underline underline-offset-4" : "hover:text-blue-400"}`}>
-                <a href="#location">Location</a>
-              </li>
-              <li>
-                <SignedOut>
-                  <Link href="/login">
-                    <button className="px-5 py-2 rounded-full border border-white text-white hover:bg-white hover:text-[#0f172a] transition">
-                      Login
+          <ul className="hidden md:flex items-center space-x-8 text-white font-medium ml-120">
+            <li
+              className={`cursor-pointer transition ${
+                activeSection === "home"
+                  ? "text-blue-400 font-bold underline underline-offset-4"
+                  : "hover:text-blue-400"
+              }`}
+            >
+              <a href="#home">Home</a>
+            </li>
+            <li
+              className={`cursor-pointer transition ${
+                activeSection === "about"
+                  ? "text-blue-400 font-bold underline underline-offset-4"
+                  : "hover:text-blue-400"
+              }`}
+            >
+              <a href="#about">About</a>
+            </li>
+            <li
+              className={`cursor-pointer transition ${
+                activeSection === "location"
+                  ? "text-blue-400 font-bold underline underline-offset-4"
+                  : "hover:text-blue-400"
+              }`}
+            >
+              <a href="#location">Location</a>
+            </li>
+
+            <li>
+              <SignedOut>
+                <Link href="/login">
+                  <button className="px-5 py-2 rounded-full border border-white text-white hover:bg-white hover:text-[#0f172a] transition">
+                    Login
+                  </button>
+                </Link>
+              </SignedOut>
+
+              <SignedIn>
+                <div className="flex items-center gap-3">
+                  <Link href="/selectDate">
+                    <button className="px-4 py-2 rounded-full border border-white text-white hover:bg-blue-300 hover:text-[#0f172a] transition">
+                      Daftar Hadir
                     </button>
                   </Link>
-                </SignedOut>
 
-                <SignedIn>
                   <UserButton afterSignOutUrl="/index.tsx" />
-                </SignedIn>
-              </li>
-            </ul>
-          </nav>
+                </div>
+              </SignedIn>
+            </li>
+          </ul>
+        </nav>
 
         <div className="relative z-10 flex flex-col items-start justify-start flex-1 text-left pl-6 md:pr-80 pt-40">
           <h1 className="text-5xl md:text-6xl font-bold text-white">
