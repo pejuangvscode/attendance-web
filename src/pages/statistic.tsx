@@ -31,7 +31,7 @@ export default function Statistic() {
             </div>
           </div>
           <SignedIn>
-            <UserButton afterSignOutUrl="/index.tsx" />
+            <UserButton afterSignOutUrl="/" />
           </SignedIn>
         </div>
       </div>

@@ -4,28 +4,35 @@ import Link from "next/link";
 import { SignedOut, UserButton, SignedIn } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 
-
 export default function Home() {
-  const [activeSection, setActiveSection] = useState("home");
+  const [activeSection, setActiveSection] = useState<string>("home");
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  const handleScroll = () => {
+    if (window.scrollY > lastScrollY) {
+      // Scroll ke bawah
+      setShowNavbar(false);
+    } else {
+      // Scroll ke atas
+      setShowNavbar(true);
+    }
+    setLastScrollY(window.scrollY);
+  };
 
   useEffect(() => {
-    const sections = document.querySelectorAll("section");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
-    sections.forEach((section) => observer.observe(section));
-    return () => {
-      sections.forEach((section) => observer.unobserve(section));
-    };
-  }, []);
+  const handleMenuClick = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      setShowNavbar(true); // pastikan navbar tetap muncul
+      setActiveSection(sectionId);
+    }
+  };
 
   return (
     <>
@@ -37,50 +44,34 @@ export default function Home() {
 
       {/* HOME */}
       <section id="home" className="relative flex min-h-screen flex-col items-center justify-start">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/backgroundHome.jpg')" }}/>
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/backgroundHome.jpg')" }}
+        />
         <div className="absolute inset-0 bg-[#0f172a]/80" />
-          <nav className="fixed top-0 left-0 z-50 flex w-full items-center justify-center px-8 py-6 bg-[#0f172a]/60 backdrop-blur-sm">
+        <nav
+          className={`fixed top-0 left-0 z-50 flex w-full items-center justify-center px-8 py-6 bg-[#0f172a]/60 backdrop-blur-sm transition-transform duration-300 ${
+            showNavbar ? "translate-y-0" : "-translate-y-full"
+          }`}
+        >
           <div className="flex items-center space-x-4">
-            <Image
-              src="/LOGOGKI.png"
-              alt="Logo"
-              width={48}
-              height={48}
-              className="h-12 w-12"
-            />
-            <span className="text-white font-semibold text-xl">
-              GKI Karawaci
-            </span>
+            <Image src="/LOGOGKI.png" alt="Logo" width={48} height={48} className="h-12 w-12" />
+            <span className="text-white font-semibold text-xl">GKI Karawaci</span>
           </div>
 
           <ul className="hidden md:flex items-center space-x-8 text-white font-medium ml-120">
-            <li
-              className={`cursor-pointer transition ${
-                activeSection === "home"
-                  ? "text-blue-400 font-bold underline underline-offset-4"
-                  : "hover:text-blue-400"
-              }`}
-            >
-              <a href="#home">Home</a>
-            </li>
-            <li
-              className={`cursor-pointer transition ${
-                activeSection === "about"
-                  ? "text-blue-400 font-bold underline underline-offset-4"
-                  : "hover:text-blue-400"
-              }`}
-            >
-              <a href="#about">About</a>
-            </li>
-            <li
-              className={`cursor-pointer transition ${
-                activeSection === "location"
-                  ? "text-blue-400 font-bold underline underline-offset-4"
-                  : "hover:text-blue-400"
-              }`}
-            >
-              <a href="#location">Location</a>
-            </li>
+            {["home", "about", "location"].map((section) => (
+              <li
+                key={section}
+                className={`cursor-pointer transition ${
+                  activeSection === section
+                    ? "text-blue-400 font-bold underline underline-offset-4"
+                    : "hover:text-blue-400"
+                }`}
+              >
+                <button onClick={() => handleMenuClick(section)}>{section.charAt(0).toUpperCase() + section.slice(1)}</button>
+              </li>
+            ))}
 
             <li>
               <SignedOut>
@@ -99,7 +90,7 @@ export default function Home() {
                     </button>
                   </Link>
 
-                  <UserButton afterSignOutUrl="/index.tsx" />
+                  <UserButton afterSignOutUrl="/" />
                 </div>
               </SignedIn>
             </li>
@@ -107,11 +98,11 @@ export default function Home() {
         </nav>
 
         <div className="relative z-10 flex flex-col items-start justify-start flex-1 text-left pl-6 md:pr-80 pt-40">
-          <h1 className="text-5xl md:text-6xl font-bold text-white">
-            Welcome
-          </h1>
+          <h1 className="text-5xl md:text-6xl font-bold text-white">Welcome</h1>
           <p className="mt-6 text-lg text-gray-300 max-w-2xl">
-            Temukan informasi lengkap tentang kehadiran dan keterlibatan jemaat dalam ibadah dan pelayanan. Mari kita bersama meninjau pertumbuhan komunitas kita, sebagai bagian dari panggilan untuk terus bertumbuh dalam iman dan kesetiaan.
+            Temukan informasi lengkap tentang kehadiran dan keterlibatan jemaat dalam ibadah dan
+            pelayanan. Mari kita bersama meninjau pertumbuhan komunitas kita, sebagai bagian dari
+            panggilan untuk terus bertumbuh dalam iman dan kesetiaan.
           </p>
           <SignedOut>
             <Link href="/login">
@@ -122,6 +113,7 @@ export default function Home() {
           </SignedOut>
         </div>
 
+        {/* Statistik */}
         <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 w-11/12 md:w-3/4 bg-white rounded-2xl shadow-lg p-8 grid grid-cols-2 md:grid-cols-3 gap-6 z-20">
           <div className="text-center">
             <div className="text-gray-600 font-semibold">Statistik Ibadah</div>
@@ -139,17 +131,17 @@ export default function Home() {
       </section>
 
       {/* ABOUT */}
-      <section id= "about" className="relative flex min-h-screen flex-col items-center justify-start bg-gray-200">
+      <section id="about" className="relative flex min-h-screen flex-col items-center justify-start bg-gray-200">
         <div className="container mx-auto px-6 py-33 md:px-12 flex flex-col md:flex-row items-center gap-12">
           <div className="flex-1 text-center md:text-left ml-33">
             <h2 className="text-4xl md:text-4xl font-bold text-gray-800 mb-4">
               Aplikasi Monitoring dan Analisis Jemaat Gereja
             </h2>
             <p className="text-gray-600 leading-relaxed text-lg mb-6">
-              Aplikasi ini menyajikan data jemaat dalam bentuk tabel yang mudah diakses 
-              serta dilengkapi dengan statistik visual seperti grafik usia, jumlah kehadiran, 
-              dan pertumbuhan jemaat, sehingga memudahkan gereja dalam mengelola dan 
-              menganalisis informasi secara efektif.
+              Aplikasi ini menyajikan data jemaat dalam bentuk tabel yang mudah diakses serta
+              dilengkapi dengan statistik visual seperti grafik usia, jumlah kehadiran, dan
+              pertumbuhan jemaat, sehingga memudahkan gereja dalam mengelola dan menganalisis
+              informasi secara efektif.
             </p>
             <SignedOut>
               <Link href="/login">
@@ -161,23 +153,39 @@ export default function Home() {
           </div>
 
           <div className="flex-1 ml-30">
-            <Image src="/pic_sectionAbout.jpeg" alt="Gereja" width={300} height={400} className="rounded-lg shadow-md"/>
+            <Image
+              src="/pic_sectionAbout.jpeg"
+              alt="Gereja"
+              width={300}
+              height={400}
+              className="rounded-lg shadow-md"
+            />
           </div>
         </div>
       </section>
 
-      {/* LOCATION */} 
-     <section id="location" className="relative flex min-h-screen flex-col md:flex-row items-center justify-center w-full bg-gray-200 px-8 md:px-20 py-20 gap-10">
+      {/* LOCATION */}
+      <section
+        id="location"
+        className="relative flex min-h-screen flex-col md:flex-row items-center justify-center w-full bg-gray-200 px-8 md:px-20 gap-10"
+      >
         <div className="flex-1 py-28 text-center md:text-left ml-33">
           <h2 className="text-4xl md:text-4xl font-bold text-gray-800 mb-6">Lokasi Kami</h2>
           <p className="text-gray-600 text-base mb-6 max-w-lg">
-            GKI Karawaci berlokasi di pusat kota yang mudah dijangkau. 
-            Silakan kunjungi kami untuk ibadah Minggu maupun kegiatan pelayanan lainnya.
+            GKI Karawaci berlokasi di pusat kota yang mudah dijangkau. Silakan kunjungi kami untuk
+            ibadah Minggu maupun kegiatan pelayanan lainnya.
           </p>
           <div className="space-y-2 text-base text-gray-700">
-            <p><strong>📍 Alamat:</strong> Ruko Villa Permata Blok C1 No. 3&8, Binong, Kec. Curug, Kabupaten Tangerang, Banten 15810</p>
-            <p><strong>☎️ Telepon:</strong> (021) 5919627</p>
-            <p><strong>⏰ Ibadah Minggu (umum):</strong> 07:00 WIB, 10:00 WIB, dan 17:00 WIB</p>
+            <p>
+              <strong>📍 Alamat:</strong> Ruko Villa Permata Blok C1 No. 3&8, Binong, Kec. Curug,
+              Kabupaten Tangerang, Banten 15810
+            </p>
+            <p>
+              <strong>☎️ Telepon:</strong> (021) 5919627
+            </p>
+            <p>
+              <strong>⏰ Ibadah Minggu (umum):</strong> 07:00 WIB, 10:00 WIB, dan 17:00 WIB
+            </p>
           </div>
         </div>
 
@@ -208,7 +216,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
     </>
   );
 }

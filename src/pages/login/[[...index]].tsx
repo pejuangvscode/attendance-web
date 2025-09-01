@@ -15,7 +15,7 @@ export default function LoginPage() {
         </div>
 
         <SignedIn>
-          <UserButton afterSignOutUrl="/login" />
+          <UserButton afterSignOutUrl="/" />
         </SignedIn>
 
         <SignedOut>

@@ -87,7 +87,7 @@ export default function DatabasePage() {
             </div>
           </div>
           <SignedIn>
-            <UserButton afterSignOutUrl="/index.tsx" />
+            <UserButton afterSignOutUrl="/" />
           </SignedIn>
         </div>
       </div>
