@@ -25,14 +25,25 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  const handleMenuClick = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setShowNavbar(true); // pastikan navbar tetap muncul
-      setActiveSection(sectionId);
-    }
-  };
+
+  useEffect(() => {
+    const sections = document.querySelectorAll("section");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
 
   return (
     <>
@@ -60,18 +71,33 @@ export default function Home() {
           </div>
 
           <ul className="hidden md:flex items-center space-x-8 text-white font-medium ml-120">
-            {["home", "about", "location"].map((section) => (
-              <li
-                key={section}
-                className={`cursor-pointer transition ${
-                  activeSection === section
-                    ? "text-blue-400 font-bold underline underline-offset-4"
-                    : "hover:text-blue-400"
-                }`}
-              >
-                <button onClick={() => handleMenuClick(section)}>{section.charAt(0).toUpperCase() + section.slice(1)}</button>
-              </li>
-            ))}
+            <li
+              className={`cursor-pointer transition ${
+                activeSection === "home"
+                  ? "text-blue-400 font-bold underline underline-offset-4"
+                  : "hover:text-blue-400"
+              }`}
+            >
+              <a href="#home">Home</a>
+            </li>
+            <li
+              className={`cursor-pointer transition ${
+                activeSection === "about"
+                  ? "text-blue-400 font-bold underline underline-offset-4"
+                  : "hover:text-blue-400"
+              }`}
+            >
+              <a href="#about">About</a>
+            </li>
+            <li
+              className={`cursor-pointer transition ${
+                activeSection === "location"
+                  ? "text-blue-400 font-bold underline underline-offset-4"
+                  : "hover:text-blue-400"
+              }`}
+            >
+              <a href="#location">Location</a>
+            </li>
 
             <li>
               <SignedOut>
